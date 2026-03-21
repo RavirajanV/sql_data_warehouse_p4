@@ -1,0 +1,182 @@
+Notion: DWH Project Plan --> https://www.notion.so/Data-Warehouse-
+
+Project-318ccb03ad4d80a992ffde1fa64b0f7b
+
+Data WareHouse:
+	A subject-oriented, integrated, time-variant, and non-volatile collection of data in support of management's decision-making process
+
+ETL:
+
+Extraction Methods: Push, Pull
+
+Extraction Types: Full, Incremental
+
+Extraction Techniques: Manual Data, Database Querying, File Parsing, API Calls, Event Based Streaming,
+		       CDC [Change Data Capture], Web Scraping
+
+Transformation: Data Enrichment, Data Integration, Derived Columns, Data Cleansing, Data Aggregations,
+		Business Rules & Logic, Data Normalization & Standardization
+		
+		Data Cleansing: Remove Duplicates, Data Filtering, Handling Missing Data, Handling invalid 			values, Handling unwanted spaces, Data Type Casting, Outlier Detection
+
+Load: 
+Processing Types: Batch, Stream
+
+Load Methods: Full Load: Incremental Load
+
+Full Load: Truncate & Insert, Update + Insert, Drop, Create, Insert
+
+Incremental Load: Update + Insert, Append, Merge
+
+Slowly Changing Dimensions: SCD 0 [No Historization], SCD 1 [Overwrite], SCD 2 [Historization], SCD _
+
+
+Requirement Analysis: Talk with business people and get the requirements clearly,
+
+Design: 
+	Data Architecture: --> Build Data Ware House --> Build Data Lake --> Build Data Lakehouse --> Build Data Mesh
+
+	Four Approaches to build Data Ware House:
+		Inmon                  --> Stage --> EDW -----------------------> Data Marts
+
+		Kimball                --> Stage -------------------------------> Data Marts
+
+		Data Vault             --> Stage -> Raw Vault -> Bronze Vault --> Data Marts
+
+		Medallion Architecture --> Bronze --> Silver --> Gold
+
+Bronze Layer: 
+	
+	Definition: Row, unprocessed data as-is from sources
+	
+	Objective: Traceability and Debugging
+
+	Object Type: Tables
+
+	Load Method: Full Load ( Truncate and Insert )
+
+	Data Transformation: None ( as-is )
+
+	Data Modelling: None ( as-is )
+
+	Target Audience: Data Engineers
+
+Silver Layer:
+	
+	Definition: Clean and standardized data
+
+	Objective: Intermediate Layer -> Prepare Data for Analysis
+	
+	Object Type: Tables
+
+	Load Method: Full Load ( Truncate and Insert )
+
+	Data Transformation: Data Cleaning, Data Standardization, Data Normalization, Derived Columns, 	Data Enrichment
+
+	Data Modelling: None ( as-is )
+	
+	Target Audience: Data Analysts, Data Engineers
+
+Gold Layer:
+
+	Definition: Business)Ready data
+
+	Objective: Provide data to be consume for repasting and Analytics
+
+	Object Type: Views
+
+	Load Method: None
+
+	Data Transformation: Data Integration, Data Aggregation, Business Logic and Rules
+
+	Data Modelling: Start Schema, Aggregated Objects, Flat Tables
+
+	Target Audience: Data Analysts, Business Users
+
+For Icons in Data Architecture Diagram: https://www.flaticon.com/search?word=sql%20server
+
+Naming Conventions: 
+      Set of Rules or Guidelines for naming anything in the project.
+      
+      Database, Schema, Tables, Store Procedures
+
+      Snake Case [eg.customer_name]
+
+      Language, avoid reserved names
+
+      Bronze Layer Rules & Silver Layer Rules: All names must start with your source system, name and 
+      table names match their original names without meaning eg: crm_customer_info
+
+      Gold Layer Rules: All names must use meaningful, business-aligned names for tables, starting with    
+      the category prefix
+      
+      Column Naming Conventions: Surrogate Keys: All PK in dimension tables must use the suffix eg. 					 name_key
+		   		 
+				 Technical Columns: All technical columns must start with the prefix eg. 				 dwh_name followed by a descriptive name indicating the columns purpose.
+      				 
+				 Stored Procedure: All stored procedures used for loading data must 					 follow the naming pattern. eg. load_layer
+
+Bronze Layer:
+	Analyzing Laying [ Interview Source System Experts ]:
+		Business Context and Ownership:
+			1. Who owns the data?
+			2. What Business Process it supports?
+			3. System & Data Documentation.
+
+		Architecture and Technology Stack:
+			1. How is data stored?
+				[ SQL Server, Oracle, AWS, Azure ]
+			2. What are the Integration Capabilities.
+
+		Extract & Load:
+			1. Incremental vs Full Loads?
+			2. Data Scope & Historical Needs,
+			3. What is the expected size of the extracts?
+			4. Are there any data volume limitations?
+			5. How to avoid impacting the source system's performance?
+			6. Authentication and Authorization. [tokens, SSH keys, VPN, IP whitelisting]
+
+Silver Layer:
+	Analyzing: Explore and Understand the Data  
+			|
+			V
+	Coding [ Data Cleansing ] 
+		-- > Check Quality of Bronze --> Write Data Transformations --> Insert into Silver
+			|
+			V
+	Validating: Data Correctness Checks
+			|
+			V
+	Docs & Version: Data Documenting Versioning in GIT --> Data Flow & Data Intergration
+
+Meta Data Columns:
+	Extra columns added by data engineers that do not originate from the source data
+	eg: create_date: The record's load timestamp
+	    update_date: The record's last update timestamp
+	
+Consistency: 
+	If you introduce an improvement, like better logging or 
+	error handling, in one stored procedure, apply it to the
+	others to maintain consistent standards and benefits.
+
+Three Types of Data Modelling:
+1. Conceptual Data Model --> Big Picture,
+2. Logical Data Model --> Blue Print,
+3. Physical Data Model --> Implementation.
+
+Star Schema vs Snowflake Schema:
+
+Star Schema: --> Simple and Easy, Big Dimensions --> Perfect for reporting
+	Central Fact table in the middle containing transactions and dimensions containing description
+	They form a star like pattern.
+	Relationship between fact and dimension is 1-to-many(1:N)
+
+Snowflake Schema: --> More Complex, Large Datasets
+	Central Fact table in the middle and surrounded by dimensions and these dims are branched
+	and forming like a snowflake pattern.
+
+Dimensions vs Facts:
+Dim: Descriptive information that give context to your data. --> Who? What? Where?
+Fact: Quantitative information that represents events --> How many? How much?
+
+
