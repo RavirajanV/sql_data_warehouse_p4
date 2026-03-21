@@ -25,7 +25,8 @@ Usage:
 IF OBJECT_ID('gold.dim_customers', 'V') IS NOT NULL
   DROP VIEW gold.dim_customers;
 GO
-  
+
+-- silver.crm_cust_info + silver.erp_cust_az12 + silver.erp_loc_a101
 CREATE VIEW gold.dim_customers 
 AS
 SELECT
@@ -56,7 +57,7 @@ IF OBJECT_ID('gold.dim_products', 'V') IS NOT NULL
   DROP VIEW gold.dim_products;
 GO
 
--- crm_prd_info + erp_px_cat_g1v2
+-- silver.crm_prd_info + silver.erp_px_cat_g1v2
 CREATE VIEW gold.dim_products 
 AS
 SELECT
@@ -82,10 +83,10 @@ GO
 -- =============================================================
 -- Check 'gold.fact_sales' View exists or not
 IF OBJECT_ID('gold.fact_sales', 'V') IS NOT NULL
-  DROP VIEW gold.dim_products;
+  DROP VIEW gold.fact_sales;
 GO
 
--- crm_sales_details + crm_cust_info + crm_prd_info
+-- silver.crm_sales_details + silver.crm_cust_info + silver.crm_prd_info
 CREATE VIEW gold.fact_sales
 AS
 SELECT
